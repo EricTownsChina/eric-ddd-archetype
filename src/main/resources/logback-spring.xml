@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+scan: 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+scanPeriod: 设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值false。
+-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <springProperty scope="context" name="log_file_path" source="logging.file.path"/>
+    <springProperty scope="context" name="log_file_name" source="logging.file.name"/>
+
+    <!-- %t thread; %c class; %L line; %m msg -->
+    <property name="log_pattern_console"
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%highlight(%-5level)] [%green(%t)] [%c{0}:%L] [%m]%n"/>
+    <property name="log_pattern_file" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%t] [%c{0}:%L] [%m]%n"/>
+
+    <!-- 控制台日志输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log_pattern_console}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 文件日志输出 -->
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>${log_file_path}/${log_file_name}.log</file>
+        <encoder>
+            <pattern>${log_pattern_file}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误文件输出 -->
+    <appender name="error_file" class="ch.qos.logback.core.FileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <file>${log_file_path}/${log_file_name}_error.log</file>
+        <encoder>
+            <pattern>${log_pattern_file}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="time_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_file_path}/${log_file_name}_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log_pattern_file}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="time_error_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_file_path}/${log_file_name}_error_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log_pattern_file}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.mybatis.spring" level="WARN" />
+    <logger name="com.baomidou.mybatisplus" level="WARN" />
+    <logger name="com.ulisesbocchio" level="ERROR" />
+
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+        <appender-ref ref="error_file"/>
+        <appender-ref ref="time_file"/>
+        <appender-ref ref="time_error_file"/>
+    </root>
+</configuration>

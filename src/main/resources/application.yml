@@ -1,0 +1,15 @@
+server:
+  port: 8007
+  servlet:
+    context-path: /${spring.application.name}
+
+spring:
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: dev
+
+logging:
+  file:
+    path: ./data/logs/
+    name: ${spring.application.name}
