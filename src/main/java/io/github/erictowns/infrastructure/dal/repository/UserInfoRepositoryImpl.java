@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserInfoRepositoryImpl implements UserInfoRepository {
 
-    private final UserInfoMapper userMapper;
+    private UserInfoMapper userMapper;
 
-    public UserInfoRepositoryImpl(@Nullable UserInfoMapper userMapper) {
+    public void setUserMapper(UserInfoMapper userMapper) {
         this.userMapper = userMapper;
     }
 

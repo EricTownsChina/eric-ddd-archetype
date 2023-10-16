@@ -19,9 +19,9 @@ public class UserInfoCacheRepositoryImpl implements UserInfoCacheRepository {
 
     private static final String KEY_PRE_USERNAME_BY_ID = "username::id::";
 
-    private final JedisPool jedisPool;
+    private JedisPool jedisPool;
 
-    public UserInfoCacheRepositoryImpl(@Nullable JedisPool jedisPool) {
+    public void setJedisPool(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
     }
 
