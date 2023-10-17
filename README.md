@@ -9,7 +9,7 @@ eric-ddd-archetype
 
 ### 1. 在项目路径下执行maven命令
 ``` maven
-mvn archetype:create-from-project -Darchetype.properties=archetype.properties
+mvn archetype:create-from-project
 ```
 成功后会在项目路径下生成target目录, 结构为
 ```txt
@@ -31,8 +31,6 @@ maven archetype:crawl
 添加的archetype信息为
 ```text
 groupId: io.github.erictowns
-artifactId: eric-ddd-archetype-archetype
+artifactId: eric-ddd-archetype
 version: 0.0.1
 ```
-
-
