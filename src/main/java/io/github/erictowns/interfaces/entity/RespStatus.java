@@ -15,7 +15,11 @@ public enum RespStatus {
     /**
      * status error
      */
-    ERROR(500, "error");
+    ERROR(500, "error"),
+    /**
+     * suspected replay attack
+     */
+    SUSPECTED_REPLAY_ATTACK(5100, "suspected replay attack");
 
 
     private final int code;
