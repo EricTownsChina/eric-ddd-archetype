@@ -82,7 +82,7 @@ public class JasyptUtil {
         String jasyptEncrypt = stringEncryptor(secretKey, message, true);
         System.out.println(jasyptEncrypt);
 
-        String jasyptEncrypt1 = stringEncryptor(secretKey, "", false);
+        String jasyptEncrypt1 = stringEncryptor(secretKey, jasyptEncrypt, false);
         System.out.println(jasyptEncrypt1);
     }
 
