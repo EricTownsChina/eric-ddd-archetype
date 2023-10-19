@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 /**
  * Description: config to enable xss filter
@@ -21,7 +22,7 @@ public class XssFilterConfig {
         FilterRegistrationBean<XssFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new XssFilter());
         registrationBean.addUrlPatterns("/*");
-        registrationBean.setOrder(1);
+        registrationBean.setOrder(2);
         return registrationBean;
     }
 

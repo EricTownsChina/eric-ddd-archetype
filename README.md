@@ -3,9 +3,15 @@ eric-ddd-archetype
 ==================
 
 简单的ddd项目代码demo, 可以做成maven archetype, 在创建新项目的时候可以使用  
-项目包括了mybatis-plus和redis的数据源demo代码和一些基本的工具类
+项目包括了
+1. 一些基本的工具类
+2. mybatis-plus和redis的数据源demo代码(数据源可配置开关)
+3. mybatis完整sql的打印
+4. 存储型xss过滤(可配置开关)
+5. 重放请求过滤(可配置开关)
+6. 默认的缓存实现(caffeine)
 
-使用
+制作成本地maven-archetype
 ---------------
 
 ### 1. 在项目路径下执行maven命令

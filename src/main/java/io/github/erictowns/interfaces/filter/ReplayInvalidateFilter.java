@@ -1,4 +1,4 @@
-package io.github.erictowns.interfaces.interceptor;
+package io.github.erictowns.interfaces.filter;
 
 import io.github.erictowns.common.exception.ReplayAttackException;
 import io.github.erictowns.common.utils.JasyptUtil;
@@ -8,35 +8,39 @@ import io.github.erictowns.interfaces.entity.RespStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
- * Description: 重放攻击检验拦截器
- * {@link ReplayInvalidateConfig.ReplayInvalidateProperties}里面的token需要前后端约定
+ * Description: 重放攻击校验过滤器
+ * header传参和token以及签名加密算法需要和前端约定
  *
  * @author EricTowns
- * @date 2023/10/18 17:21
+ * @date 2023/10/19 20:43
  */
-public class ReplayInvalidateInterceptor implements HandlerInterceptor {
+public class ReplayInvalidateFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReplayInvalidateInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReplayInvalidateFilter.class);
     private static final String PREFIX_NONCE = "nonce::";
 
     private final CacheRepository cacheRepository;
     private final ReplayInvalidateConfig.ReplayInvalidateProperties properties;
 
-    public ReplayInvalidateInterceptor(CacheRepository cacheRepository,
-                                       ReplayInvalidateConfig.ReplayInvalidateProperties properties) {
+    public ReplayInvalidateFilter(CacheRepository cacheRepository,
+                                  ReplayInvalidateConfig.ReplayInvalidateProperties properties) {
         this.cacheRepository = cacheRepository;
         this.properties = properties;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         String timestamp = request.getHeader("timestamp");
         String nonce = request.getHeader("nonce");
         String signature = request.getHeader("signature");
@@ -67,14 +71,7 @@ public class ReplayInvalidateInterceptor implements HandlerInterceptor {
 
         // nonce缓存
         cacheRepository.set(PREFIX_NONCE + nonce, nonce, expireSeconds);
-        return true;
+        filterChain.doFilter(request, response);
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-    }
 }

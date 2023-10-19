@@ -1,7 +1,6 @@
 package io.github.erictowns.common.utils;
 
 import com.sun.crypto.provider.SunJCE;
-import io.github.erictowns.interfaces.interceptor.ReplayInvalidateInterceptor;
 import org.jasypt.commons.CommonUtils;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;

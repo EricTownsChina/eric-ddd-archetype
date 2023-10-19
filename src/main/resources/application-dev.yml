@@ -1,10 +1,10 @@
 func:
   # 存储型xss过滤
   xss-filter:
-    enable: false
+    enable: true
   # 重放攻击校验（配合前端传参）
   replay-invalidate:
-    enable: false
+    enable: true
     token: ${spring.application.name}
     expire-seconds: 60
 

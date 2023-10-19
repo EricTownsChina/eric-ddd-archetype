@@ -34,7 +34,7 @@ public class XssFilter extends OncePerRequestFilter {
         @Override
         public String[] getParameterValues(String parameter) {
             String[] values = super.getParameterValues(parameter);
-            if (values == null || values.length <= 0) {
+            if (values == null || values.length == 0) {
                 return null;
             }
             int count = values.length;
