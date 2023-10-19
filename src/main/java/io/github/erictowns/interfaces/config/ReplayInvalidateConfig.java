@@ -27,20 +27,13 @@ public class ReplayInvalidateConfig {
     @Resource
     private ReplayInvalidateProperties replayInvalidateProperties;
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        ReplayInvalidateInterceptor replayInvalidateInterceptor =
-//                new ReplayInvalidateInterceptor(cacheRepository, replayInvalidateProperties);
-//        registry.addInterceptor(replayInvalidateInterceptor);
-//    }
-
     @Bean("replayInvalidateFilter")
     public FilterRegistrationBean<ReplayInvalidateFilter> replayInvalidateFilter() {
         FilterRegistrationBean<ReplayInvalidateFilter> registrationBean = new FilterRegistrationBean<>();
         ReplayInvalidateFilter replayInvalidateFilter =
                 new ReplayInvalidateFilter(cacheRepository, replayInvalidateProperties);
         registrationBean.setFilter(replayInvalidateFilter);
-        registrationBean.addUrlPatterns("/*");
+        registrationBean.addUrlPatterns(replayInvalidateProperties.getUrlPatterns());
         registrationBean.setOrder(1);
         return registrationBean;
     }
@@ -50,6 +43,7 @@ public class ReplayInvalidateConfig {
     public static class ReplayInvalidateProperties {
         private long expireSeconds;
         private String token;
+        private String[] urlPatterns = {"/*"};
 
         public long getExpireSeconds() {
             return expireSeconds;
@@ -65,6 +59,14 @@ public class ReplayInvalidateConfig {
 
         public void setToken(String token) {
             this.token = token;
+        }
+
+        public String[] getUrlPatterns() {
+            return urlPatterns;
+        }
+
+        public void setUrlPatterns(String[] urlPatterns) {
+            this.urlPatterns = urlPatterns;
         }
     }
 

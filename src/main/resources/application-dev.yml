@@ -2,11 +2,15 @@ func:
   # 存储型xss过滤
   xss-filter:
     enable: true
+    url-patterns:
+      - /*
   # 重放攻击校验（配合前端传参）
   replay-invalidate:
-    enable: true
+    enable: false
     token: ${spring.application.name}
     expire-seconds: 60
+    url-patterns:
+      - /*
 
 datasource:
   mysql:

@@ -1,4 +1,4 @@
-package io.github.erictowns.interfaces.config;
+package io.github.erictowns.interfaces.api;
 
 import io.github.erictowns.common.exception.BaseException;
 import io.github.erictowns.common.exception.ReplayAttackException;
@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
  */
 @RestController
 @ControllerAdvice
-public class RequestExceptionHandler {
+public class RequestExceptionController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestExceptionController.class);
 
     /**
      * 处理{@link Exception}
