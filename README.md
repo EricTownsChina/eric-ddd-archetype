@@ -1,4 +1,5 @@
-eric-ddd-archetype
+eric-ddd-archetype  
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ==================
 
 简单的ddd项目代码demo, 可以做成maven archetype, 在创建新项目的时候可以使用  
