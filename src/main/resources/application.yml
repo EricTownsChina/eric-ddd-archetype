@@ -8,6 +8,9 @@ spring:
     name: @project.artifactId@
   profiles:
     active: dev
+  web:
+    resources:
+      add-mappings: false
 
 logging:
   file:

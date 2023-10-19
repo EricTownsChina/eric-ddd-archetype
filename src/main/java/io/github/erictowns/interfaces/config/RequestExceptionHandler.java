@@ -1,6 +1,7 @@
 package io.github.erictowns.interfaces.config;
 
 import io.github.erictowns.common.exception.BaseException;
+import io.github.erictowns.common.exception.ReplayAttackException;
 import io.github.erictowns.common.exception.ValidationException;
 import io.github.erictowns.common.utils.ValidationUtil;
 import io.github.erictowns.interfaces.entity.Resp;
@@ -94,6 +95,20 @@ public class RequestExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public Resp handleException(ValidationException e) {
         LOGGER.error("validator error: ", e);
+        String msg = e.getLocalizedMessage();
+        return Resp.fail(msg);
+    }
+
+    /**
+     * 处理{@link ReplayAttackException} <br/>
+     * 疑似重放攻击请求
+     *
+     * @param e {@link ReplayAttackException}
+     * @return {@link Resp}
+     */
+    @ExceptionHandler(ReplayAttackException.class)
+    public Resp handleException(ReplayAttackException e) {
+        LOGGER.error("replay request invalidate error: ", e);
         String msg = e.getLocalizedMessage();
         return Resp.fail(msg);
     }

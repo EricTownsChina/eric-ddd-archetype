@@ -1,9 +1,9 @@
 package io.github.erictowns.infrastructure.dal.repository;
 
-import io.github.erictowns.domain.user.repository.UserInfoCacheRepository;
+import io.github.erictowns.domain.user.repository.CacheRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.params.SetParams;
@@ -14,10 +14,11 @@ import redis.clients.jedis.params.SetParams;
  * @author EricTowns
  * @date 2023/10/10 16:05
  */
-@Component
-public class UserInfoCacheRepositoryImpl implements UserInfoCacheRepository {
+@Repository("userInfoCacheRepository")
+public class UserInfoCacheRepositoryImpl implements CacheRepository {
 
     private static final String KEY_PRE_USERNAME_BY_ID = "username::id::";
+    private static final long DEFAULT_EXPIRE_SECONDS = 3 * 60 * 60L;
 
     private JedisPool jedisPool;
 
@@ -26,30 +27,40 @@ public class UserInfoCacheRepositoryImpl implements UserInfoCacheRepository {
     }
 
     @Override
-    public String getUserName(String userId) {
-        if (jedisPool == null || StringUtils.isEmpty(userId)) {
+    public @Nullable String get(String key) {
+        if (jedisPool == null || StringUtils.isEmpty(key)) {
             return null;
         }
         try (Jedis jedis = jedisPool.getResource()) {
-            String key = KEY_PRE_USERNAME_BY_ID + userId;
-            return jedis.get(key);
+            String cacheKey = KEY_PRE_USERNAME_BY_ID + key;
+            return jedis.get(cacheKey);
         }
     }
 
     @Override
-    public void setUserName(String userId, String username) {
-        if (jedisPool == null || StringUtils.isEmpty(userId)) {
-            return;
-        }
-        if (StringUtils.isEmpty(username)) {
-            username = "";
-        }
-        try (Jedis jedis = jedisPool.getResource()) {
-            String key = KEY_PRE_USERNAME_BY_ID + userId;
-            SetParams setParams = new SetParams();
-            setParams.ex(3 * 60 * 60L);
-            jedis.set(key, username, setParams);
-        }
+    public boolean exists(String key) {
+        String username = get(key);
+        return username != null;
     }
 
+    @Override
+    public void set(String key, String value) {
+        set(key, value, DEFAULT_EXPIRE_SECONDS);
+    }
+
+    @Override
+    public void set(String key, String value, long expireSeconds) {
+        if (jedisPool == null || StringUtils.isEmpty(key)) {
+            return;
+        }
+        if (StringUtils.isEmpty(value)) {
+            value = "";
+        }
+        try (Jedis jedis = jedisPool.getResource()) {
+            String cacheKey = KEY_PRE_USERNAME_BY_ID + key;
+            SetParams setParams = new SetParams();
+            setParams.ex(expireSeconds);
+            jedis.set(cacheKey, value, setParams);
+        }
+    }
 }

@@ -6,6 +6,7 @@ import io.github.erictowns.infrastructure.dal.mapper.mysql.mysql01.UserInfoMappe
 import io.github.erictowns.infrastructure.dal.po.UserInfoPo;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * desc: user repository impl
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @author EricTownsChina@outlook.com
  * @date 2023-10-03 22:51
  */
-@Component
+@Repository
 public class UserInfoRepositoryImpl implements UserInfoRepository {
 
     private UserInfoMapper userMapper;

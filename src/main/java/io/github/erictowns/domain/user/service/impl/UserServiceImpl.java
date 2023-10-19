@@ -1,11 +1,11 @@
 package io.github.erictowns.domain.user.service.impl;
 
-import io.github.erictowns.domain.user.dto.UserInfoDto;
 import io.github.erictowns.common.utils.ValidationUtil;
 import io.github.erictowns.common.validgroups.Search;
-import io.github.erictowns.domain.user.repository.UserInfoCacheRepository;
+import io.github.erictowns.domain.user.dto.UserInfoDto;
 import io.github.erictowns.domain.user.repository.UserInfoRepository;
 import io.github.erictowns.domain.user.service.UserService;
+import io.github.erictowns.infrastructure.dal.repository.UserInfoCacheRepositoryImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserInfoRepository userInfoRepository;
-    private final UserInfoCacheRepository userInfoCacheRepository;
+    private final UserInfoCacheRepositoryImpl userInfoCacheRepository;
 
     public UserServiceImpl(UserInfoRepository userInfoRepository,
-                           UserInfoCacheRepository userInfoCacheRepository) {
+                           UserInfoCacheRepositoryImpl userInfoCacheRepository) {
         this.userInfoRepository = userInfoRepository;
         this.userInfoCacheRepository = userInfoCacheRepository;
     }
@@ -40,13 +40,13 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         // get from cache
-        String username = userInfoCacheRepository.getUserName(id);
+        String username = userInfoCacheRepository.get(id);
         if (StringUtils.isEmpty(username)) {
             // get from db
             UserInfoDto userInfo = userInfoRepository.getUserInfoById(id);
             if (userInfo != null) {
                 username = userInfo.getUsername();
-                userInfoCacheRepository.setUserName(id, username);
+                userInfoCacheRepository.set(id, username);
             }
         }
         return username;
