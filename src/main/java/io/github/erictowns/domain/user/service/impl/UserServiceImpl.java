@@ -5,9 +5,13 @@ import io.github.erictowns.common.validgroups.Search;
 import io.github.erictowns.domain.user.dto.UserInfoDto;
 import io.github.erictowns.domain.user.repository.UserInfoRepository;
 import io.github.erictowns.domain.user.service.UserService;
+import io.github.erictowns.infrastructure.dal.po.UserInfoPo;
 import io.github.erictowns.infrastructure.dal.repository.UserInfoCacheRepositoryImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * desc: user service impl
@@ -52,4 +56,10 @@ public class UserServiceImpl implements UserService {
         return username;
     }
 
+    @Override
+    public void doImport(List<UserInfoDto> data) {
+        List<UserInfoPo> polist = data.stream().map(UserInfoDto::toPo).collect(Collectors.toList());
+
+        userInfoRepository.batchAdd(polist);
+    }
 }

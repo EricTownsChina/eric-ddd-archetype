@@ -4,9 +4,14 @@ import io.github.erictowns.domain.user.dto.UserInfoDto;
 import io.github.erictowns.domain.user.repository.UserInfoRepository;
 import io.github.erictowns.infrastructure.dal.mapper.mysql.mysql01.UserInfoMapper;
 import io.github.erictowns.infrastructure.dal.po.UserInfoPo;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * desc: user repository impl
@@ -18,9 +23,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserInfoRepositoryImpl implements UserInfoRepository {
 
-    private UserInfoMapper userMapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoRepositoryImpl.class);
 
-    public void setUserMapper(UserInfoMapper userMapper) {
+    private final UserInfoMapper userMapper;
+
+    public UserInfoRepositoryImpl(UserInfoMapper userMapper) {
         this.userMapper = userMapper;
     }
 
@@ -30,8 +37,16 @@ public class UserInfoRepositoryImpl implements UserInfoRepository {
         if (userMapper == null) {
             userInfoPo = null;
         } else {
-            userInfoPo = userMapper.selectUserInfoById(id);
+            userInfoPo = userMapper.selectById(id);
         }
         return UserInfoPo.toDto(userInfoPo);
+    }
+
+    @Override
+    public void batchAdd(List<UserInfoPo> data) {
+        if (CollectionUtils.isEmpty(data)) {
+            LOGGER.warn("batch data is empty.");
+        }
+        userMapper.insertIgnoreBatchSomeColumn(data);
     }
 }

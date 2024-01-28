@@ -1,6 +1,7 @@
 package io.github.erictowns.domain.user.dto;
 
 import io.github.erictowns.common.validgroups.Search;
+import io.github.erictowns.infrastructure.dal.po.UserInfoPo;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -15,8 +16,22 @@ public class UserInfoDto {
     @NotEmpty(message = "用户ID不能为空!", groups = Search.class)
     private String id;
     private String username;
+    private String password;
+    private String phone;
     private Integer age;
     private String address;
+
+    public UserInfoPo toPo() {
+        UserInfoPo target = new UserInfoPo();
+        target.setId(this.id);
+        target.setUsername(this.username);
+        target.setPassword(this.password);
+        target.setUsername(this.username);
+        target.setPhone(this.phone);
+        target.setAge(this.age);
+        target.setAddress(this.address);
+        return target;
+    }
 
     public String getId() {
         return id;
@@ -48,5 +63,21 @@ public class UserInfoDto {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

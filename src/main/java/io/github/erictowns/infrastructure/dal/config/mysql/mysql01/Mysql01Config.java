@@ -1,11 +1,14 @@
 package io.github.erictowns.infrastructure.dal.config.mysql.mysql01;
 
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.zaxxer.hikari.HikariDataSource;
-import io.github.erictowns.infrastructure.dal.interceptor.MybatisPlusAllSqlLog;
+import io.github.erictowns.infrastructure.dal.plugins.MybatisPlusAllSqlLog;
+import io.github.erictowns.infrastructure.dal.plugins.MybatisSqlInjector;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -80,10 +83,13 @@ public class Mysql01Config {
     @Bean(name = "mysql01SqlSessionFactory")
     public SqlSessionFactory mysql01SqlSessionFactory() throws Exception {
         final MybatisSqlSessionFactoryBean sessionFactory = new MybatisSqlSessionFactoryBean();
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sessionFactory.setMapperLocations(resolver.getResources("classpath:mapper/mysql/mysql01/*.xml"));
         sessionFactory.setDataSource(mysql01DataSource());
+        // 拦截器
         sessionFactory.setPlugins(mysql01Interceptor());
+        // 注入器
+        GlobalConfig globalConfig = GlobalConfigUtils.defaults();
+        globalConfig.setSqlInjector(new MybatisSqlInjector());
+        sessionFactory.setGlobalConfig(globalConfig);
         return sessionFactory.getObject();
     }
 

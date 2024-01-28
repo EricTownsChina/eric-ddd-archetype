@@ -2,6 +2,8 @@ package io.github.erictowns.domain.user.service;
 
 import io.github.erictowns.domain.user.dto.UserInfoDto;
 
+import java.util.List;
+
 /**
  * desc: user service
  *
@@ -26,5 +28,12 @@ public interface UserService {
      * @return 用户名称
      */
     String getUsernameById(String id);
+
+    /**
+     * 导入
+     *
+     * @param data 数据
+     */
+    void doImport(List<UserInfoDto> data);
 
 }

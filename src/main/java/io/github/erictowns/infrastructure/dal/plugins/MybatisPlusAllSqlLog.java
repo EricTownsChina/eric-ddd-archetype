@@ -1,4 +1,4 @@
-package io.github.erictowns.infrastructure.dal.interceptor;
+package io.github.erictowns.infrastructure.dal.plugins;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;

@@ -6,6 +6,8 @@ import io.github.erictowns.domain.user.service.UserService;
 import io.github.erictowns.interfaces.entity.Resp;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * desc: user interface
  *
@@ -35,6 +37,12 @@ public class UserController {
     public Resp getUsername(@PathVariable String id) {
         String username = userService.getUsernameById(id);
         return Resp.success(username);
+    }
+
+    @PostMapping("/import")
+    public Resp doImport(@RequestBody List<UserInfoDto> data) {
+        userService.doImport(data);
+        return Resp.success();
     }
 
 }

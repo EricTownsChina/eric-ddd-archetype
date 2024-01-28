@@ -1,6 +1,9 @@
 package io.github.erictowns.domain.user.repository;
 
 import io.github.erictowns.domain.user.dto.UserInfoDto;
+import io.github.erictowns.infrastructure.dal.po.UserInfoPo;
+
+import java.util.List;
 
 /**
  * desc: user repository
@@ -17,5 +20,12 @@ public interface UserInfoRepository {
      * @return 用户信息
      */
     UserInfoDto getUserInfoById(String userId);
+
+    /**
+     * 批量添加
+     *
+     * @param data 数据
+     */
+    void batchAdd(List<UserInfoPo> data);
 
 }
