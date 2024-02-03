@@ -77,6 +77,7 @@ public class Mysql01Config {
         if ("dev".equals(profile)) {
             interceptor.addInnerInterceptor(new MybatisPlusAllSqlLog());
         }
+
         return interceptor;
     }
 
